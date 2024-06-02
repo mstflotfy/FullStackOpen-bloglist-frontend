@@ -20,8 +20,8 @@ const createNew = async (blog) => {
   headers: { Authorization: token }
  } 
 
- const request = axios.post(baseUrl, blog, config)
- return request.data
+ const response = await axios.post(baseUrl, blog, config)
+ return response.data
 }
 
 export default { getAll, setToken, createNew }

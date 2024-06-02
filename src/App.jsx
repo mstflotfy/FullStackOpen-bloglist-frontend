@@ -4,6 +4,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import CreateBlog from './components/CreateBlog'
+import Notification from './components/notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -15,12 +16,15 @@ const App = () => {
   const [newBlogAuthor, setNewBlogAuthor] = useState('')
   const [newBlogUrl, setNewBlogUrl] = useState('')
 
+  const [notificationMsg, setNotificationMsg] = useState('')
+  const [notificationError, setNotificationError] = useState(false)
+
   const fetchBlogs = () => {
     blogService
       .getAll()
       .then(blogs =>setBlogs( blogs ))  
       .catch((error) => {
-        console.error(error)
+        handleNotification('Please sign in again.' + `Error: ${error}`, true)
 
         // handle expired token
         setUser(null)
@@ -56,7 +60,7 @@ const App = () => {
       setPassword('')
       setUser(user)
     } catch (exception) {
-      console.error(exception)
+      handleNotification('Wrong username or password. ' + `Error: ${exception}`, true)
     }
 
   }
@@ -74,21 +78,37 @@ const App = () => {
     try {
       await blogService.createNew(newBlog)
 
+      // Refetch Blogs
+      fetchBlogs()
+
       // clear input fields
       setNewBlogTitle('')
       setNewBlogAuthor('')
       setNewBlogUrl('')
 
-      // Refetch Blogs
-      fetchBlogs()
+      handleNotification(`Added a new blog post: '${newBlogTitle}' by ${newBlogAuthor}`)
+
     } catch (error) {
-      console.error(error)
+      handleNotification('Could not add new blog post. ' + `Error: ${error}`, true)
     }
+  }
+
+  const handleNotification = (msg, error = false) => {
+    setNotificationMsg(msg)
+    setNotificationError(error)
+    setTimeout(() => {
+      setNotificationMsg('')
+    }, 5000)
   }
 
   return (
     <div>
       <h1>BLOG LIST APP</h1>
+
+      {notificationMsg && 
+        <Notification msg={notificationMsg} error={notificationError}/>
+      }
+
       {!user ? 
         <LoginForm
           username={username}
