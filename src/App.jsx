@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import LoginForm from './components/LoginForm'
+import CreateBlog from './components/CreateBlog'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -10,6 +11,37 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [newBlogTitle, setNewBlogTitle] = useState('')
+  const [newBlogAuthor, setNewBlogAuthor] = useState('')
+  const [newBlogUrl, setNewBlogUrl] = useState('')
+
+  const fetchBlogs = () => {
+    blogService
+      .getAll()
+      .then(blogs =>setBlogs( blogs ))  
+      .catch((error) => {
+        console.error(error)
+
+        // handle expired token
+        setUser(null)
+        localStorage.removeItem('bloglistUser')
+      })
+  }
+
+  useEffect(() => {
+    if (user) {
+      fetchBlogs()
+    }
+  }, [user])
+
+  useEffect(() => {
+    const userLogged = JSON.parse(localStorage.getItem('bloglistUser'))
+    if (userLogged) {
+      setUser(userLogged)
+      blogService.setToken(userLogged.token)
+    }
+    
+  }, [])
 
   const login = async (event) => {
     event.preventDefault()
@@ -29,27 +61,31 @@ const App = () => {
 
   }
 
-  useEffect(() => {
-    if (user) {
-      blogService.getAll().then(blogs =>
-        setBlogs( blogs )
-      )  
-    }
-  }, [user])
-
-  useEffect(() => {
-    const userLogged = JSON.parse(localStorage.getItem('bloglistUser'))
-    if (userLogged) {
-      setUser(userLogged)
-      blogService.setToken(userLogged.token)
-    }
-    
-  }, [])
-
   const logout = () => {
     window.localStorage.removeItem('bloglistUser')
     setUser(null)
   }
+
+  const handleSubmitBlog = async (event) => {
+    event.preventDefault()
+
+    const newBlog = {title: newBlogTitle, author: newBlogAuthor, url: newBlogUrl}
+
+    try {
+      await blogService.createNew(newBlog)
+
+      // clear input fields
+      setNewBlogTitle('')
+      setNewBlogAuthor('')
+      setNewBlogUrl('')
+
+      // Refetch Blogs
+      fetchBlogs()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <div>
       <h1>BLOG LIST APP</h1>
@@ -64,6 +100,16 @@ const App = () => {
         <div>
           <small>Hey, {user.name}</small>
           <button onClick={logout}>Log Out</button>
+
+          <CreateBlog 
+            newBlogTitle={newBlogTitle}
+            newBlogUrl={newBlogUrl}
+            newBlogAuthor={newBlogAuthor}
+            handleNewBlogTitleChange={({target}) => setNewBlogTitle(target.value)}
+            handleNewBlogAuthorChange={({target}) => setNewBlogAuthor(target.value)} 
+            handleNewBlogUrlChange={({target}) => setNewBlogUrl(target.value)}
+            handleSubmit={handleSubmitBlog}
+          />
 
           <h2>blogs</h2>
           {blogs.map(blog =>
