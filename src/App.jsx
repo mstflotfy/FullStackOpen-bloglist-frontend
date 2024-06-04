@@ -13,9 +13,6 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [newBlogTitle, setNewBlogTitle] = useState('')
-  const [newBlogAuthor, setNewBlogAuthor] = useState('')
-  const [newBlogUrl, setNewBlogUrl] = useState('')
 
   const [notificationMsg, setNotificationMsg] = useState('')
   const [notificationError, setNotificationError] = useState(false)
@@ -73,32 +70,6 @@ const App = () => {
     setUser(null)
   }
 
-  const handleSubmitBlog = async (event) => {
-    event.preventDefault()
-
-    const newBlog = {title: newBlogTitle, author: newBlogAuthor, url: newBlogUrl}
-
-    try {
-      await blogService.createNew(newBlog)
-
-      // Refetch Blogs
-      fetchBlogs()
-
-      // clear input fields
-      setNewBlogTitle('')
-      setNewBlogAuthor('')
-      setNewBlogUrl('')
-
-      handleNotification(`Added a new blog post: '${newBlogTitle}' by ${newBlogAuthor}`)
-
-    } catch (error) {
-      handleNotification('Could not add new blog post. ' + `Error: ${error}`, true)
-    }
-
-    newPostRef.current.toggleVisiblity()
-      
-  }
-
   const handleNotification = (msg, error = false) => {
     setNotificationMsg(msg)
     setNotificationError(error)
@@ -132,13 +103,9 @@ const App = () => {
             ref={newPostRef}
           >
           <CreateBlog 
-            newBlogTitle={newBlogTitle}
-            newBlogUrl={newBlogUrl}
-            newBlogAuthor={newBlogAuthor}
-            handleNewBlogTitleChange={({target}) => setNewBlogTitle(target.value)}
-            handleNewBlogAuthorChange={({target}) => setNewBlogAuthor(target.value)} 
-            handleNewBlogUrlChange={({target}) => setNewBlogUrl(target.value)}
-            handleSubmit={handleSubmitBlog}
+            handleNotification={handleNotification}
+            fetchBlogs={fetchBlogs}
+            newPostRef={newPostRef}
           />
           </Togglable>
           <h2>blogs</h2>
