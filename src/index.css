@@ -27,3 +27,19 @@ h1 {
   background-color: rgb(194, 213, 191);
   border: solid 1px rgb(0, 255, 166);
 }
+
+.Blog {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border: solid 1px rgb(160, 159, 159);
+  border-radius: 8px;
+  padding: 1.2rem;
+  margin-bottom: 0.8rem;
+}
+.Blog__details {
+  border: solid 1px rgb(190, 190, 190);
+  border-radius: 8px;
+  margin-bottom: 1.2rem;
+  padding: 0.4rem;
+}
