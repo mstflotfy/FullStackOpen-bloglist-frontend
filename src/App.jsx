@@ -22,7 +22,7 @@ const App = () => {
   const fetchBlogs = () => {
     blogService
       .getAll()
-      .then(blogs =>setBlogs( blogs ))  
+      .then(blogs => setBlogs(sortBlogs(blogs)))  
       .catch((error) => {
         handleNotification('Please sign in again.' + `Error: ${error}`, true)
 
@@ -89,13 +89,15 @@ const App = () => {
     try {
       const updated = await blogService.update(updatedBlog, blog.id) 
       setBlogs(
-        blogs.map(b => b.id === blog.id ? updated : b)
+        sortBlogs(blogs.map(b => b.id === blog.id ? updated : b))
       )
       handleNotification(`${updated.title} got ${updated.likes}`)
     } catch (error) {
       handleNotification(`Could not add like! Error: ${error}`, true)
     }
   }
+
+  const sortBlogs = (blogs) => blogs.sort((a, b) => b.likes - a.likes)
 
   return (
     <div>
