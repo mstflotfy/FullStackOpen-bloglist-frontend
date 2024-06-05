@@ -1,10 +1,8 @@
 import Togglable from "./Togglable"
+import blogService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleIncrementLikes }) => {
 
-  const toggleLike = () => {
-    console.log('likes + 1')
-  }
 
   const listItemStyle = {
     display: 'flex',
@@ -23,7 +21,7 @@ const Blog = ({ blog }) => {
           </p>
           <p style={listItemStyle}>
             Likes: {blog.likes}
-            <button onClick={toggleLike}>Likes</button>
+            <button onClick={() => handleIncrementLikes(blog)}>Likes</button>
           </p>
           <p>
             Author: {blog.author}

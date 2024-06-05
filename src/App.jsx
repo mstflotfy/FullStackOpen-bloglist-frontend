@@ -78,6 +78,25 @@ const App = () => {
     }, 5000)
   }
 
+  const handleIncrementLikes = async (blog) => {
+    const updatedBlog = {
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url
+    }
+
+    try {
+      const updated = await blogService.update(updatedBlog, blog.id) 
+      setBlogs(
+        blogs.map(b => b.id === blog.id ? updated : b)
+      )
+      handleNotification(`${updated.title} got ${updated.likes}`)
+    } catch (error) {
+      handleNotification(`Could not add like! Error: ${error}`, true)
+    }
+  }
+
   return (
     <div>
       <h1>BLOG LIST APP</h1>
@@ -110,7 +129,7 @@ const App = () => {
           </Togglable>
           <h2>blogs</h2>
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} handleIncrementLikes={handleIncrementLikes}/>
           )}
         </div>
       }
