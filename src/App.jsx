@@ -22,7 +22,7 @@ const App = () => {
   const fetchBlogs = () => {
     blogService
       .getAll()
-      .then(blogs => setBlogs(sortBlogs(blogs)))  
+      .then(blogs => setBlogs(sortBlogs(blogs)))
       .catch((error) => {
         handleNotification('Please sign in again.' + `Error: ${error}`, true)
 
@@ -44,13 +44,12 @@ const App = () => {
       setUser(userLogged)
       blogService.setToken(userLogged.token)
     }
-    
   }, [])
 
   const login = async (event) => {
     event.preventDefault()
 
-    const credentials = {username, password}
+    const credentials = { username, password }
 
     try {
       const user = await loginService.login(credentials)
@@ -87,7 +86,7 @@ const App = () => {
     }
 
     try {
-      const updated = await blogService.update(updatedBlog, blog.id) 
+      const updated = await blogService.update(updatedBlog, blog.id)
       updated.user = blog.user // update on the frontend
       setBlogs(
         sortBlogs(blogs.map(b => b.id === blog.id ? updated : b))
@@ -123,7 +122,7 @@ const App = () => {
         <Notification msg={notificationMsg} error={notificationError}/>
       }
 
-      {!user ? 
+      {!user ?
         <LoginForm
           username={username}
           password={password}
@@ -139,17 +138,17 @@ const App = () => {
             showButtonText="New Blog"
             ref={newPostRef}
           >
-          <CreateBlog 
-            handleNotification={handleNotification}
-            fetchBlogs={fetchBlogs}
-            newPostRef={newPostRef}
-          />
+            <CreateBlog
+              handleNotification={handleNotification}
+              fetchBlogs={fetchBlogs}
+              newPostRef={newPostRef}
+            />
           </Togglable>
           <h2>blogs</h2>
           {blogs.map(blog =>
             <Blog 
-              key={blog.id} 
-              blog={blog} 
+              key={blog.id}
+              blog={blog}
               user={user}
               handleIncrementLikes={handleIncrementLikes}
               handleDeletePost={handleDeletePost}

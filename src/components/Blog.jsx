@@ -1,5 +1,5 @@
-import Togglable from "./Togglable"
-import blogService from '../services/blogs'
+import Togglable from './Togglable'
+import PropTypes from 'prop-types'
 
 const Blog = ({ blog, handleIncrementLikes, handleDeletePost, user }) => {
 
@@ -17,7 +17,7 @@ const Blog = ({ blog, handleIncrementLikes, handleDeletePost, user }) => {
   return (
     <div className="Blog">
       <h3>
-        {blog.title} 
+        {blog.title}
       </h3>
       <Togglable
         showButtonText="view"
@@ -35,13 +35,19 @@ const Blog = ({ blog, handleIncrementLikes, handleDeletePost, user }) => {
           </p>
         </div>
         {
-          isOwner() && 
+          isOwner() &&
           <button className="del" onClick={() => handleDeletePost(blog)}>Delete Post</button>
         }
-        
       </Togglable>
-    </div>  
+    </div>
   )
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  handleIncrementLikes: PropTypes.func.isRequired,
+  handleDeletePost: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 }
 
 export default Blog

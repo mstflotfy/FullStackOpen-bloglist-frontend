@@ -30,7 +30,6 @@ const Createblog = ({ handleNotification, fetchBlogs, newPostRef }) => {
     }
 
     newPostRef.current.toggleVisiblity()
-      
   }
 
   return (
@@ -47,8 +46,8 @@ const Createblog = ({ handleNotification, fetchBlogs, newPostRef }) => {
       </div>
       <div>
         <label>Author</label>
-        <input 
-          type="text" 
+        <input
+          type="text"
           name="Title"
           value={newBlogAuthor}
           onChange={(event) => setNewBlogAuthor(event.target.value)}
@@ -56,8 +55,8 @@ const Createblog = ({ handleNotification, fetchBlogs, newPostRef }) => {
       </div>
       <div>
         <label>URL</label>
-        <input 
-          type="text" 
+        <input
+          type="text"
           name="Title"
           value={newBlogUrl}
           onChange={(event) => setNewBlogUrl(event.target.value)}
