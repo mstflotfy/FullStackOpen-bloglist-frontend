@@ -7,6 +7,11 @@ h1 {
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
+button {
+  padding: 0.3rem;
+  margin: 0.2rem;
+}
+
 .Notification__container {
   position: fixed;
   top: 1rem;
@@ -36,10 +41,16 @@ h1 {
   border-radius: 8px;
   padding: 1.2rem;
   margin-bottom: 0.8rem;
+  background-color: rgb(206, 203, 203);
 }
 .Blog__details {
-  border: solid 1px rgb(190, 190, 190);
-  border-radius: 8px;
   margin-bottom: 1.2rem;
   padding: 0.4rem;
+}
+
+.del {
+  background: rgb(244, 73, 127);
+}
+.del:hover {
+  background: rgb(244, 73, 127);
 }

@@ -83,17 +83,33 @@ const App = () => {
       likes: blog.likes + 1,
       author: blog.author,
       title: blog.title,
-      url: blog.url
+      url: blog.url,
     }
 
     try {
       const updated = await blogService.update(updatedBlog, blog.id) 
+      updated.user = blog.user // update on the frontend
       setBlogs(
         sortBlogs(blogs.map(b => b.id === blog.id ? updated : b))
       )
-      handleNotification(`${updated.title} got ${updated.likes}`)
+      handleNotification(`${updated.title} got ${updated.likes} likes`)
     } catch (error) {
       handleNotification(`Could not add like! Error: ${error}`, true)
+    }
+  }
+
+  const handleDeletePost = async (blog) => {
+    if (window.confirm('Are sure you sure?')) {
+      try {
+        await blogService.deleteBlog(blog.id)
+
+        setBlogs(
+          sortBlogs(blogs.filter(b => b.id !== blog.id))
+        )
+        handleNotification(`Deleted ${blog.title}`)
+      } catch (error) {
+        handleNotification(`Could not delete post! Error: ${error}`, true)
+      }
     }
   }
 
@@ -131,7 +147,13 @@ const App = () => {
           </Togglable>
           <h2>blogs</h2>
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} handleIncrementLikes={handleIncrementLikes}/>
+            <Blog 
+              key={blog.id} 
+              blog={blog} 
+              user={user}
+              handleIncrementLikes={handleIncrementLikes}
+              handleDeletePost={handleDeletePost}
+            />
           )}
         </div>
       }
