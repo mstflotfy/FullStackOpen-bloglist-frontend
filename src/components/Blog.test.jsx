@@ -1,36 +1,49 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, test } from 'vitest'
+import { beforeEach, describe, expect, test } from 'vitest'
 import Blog from './Blog'
+import userEvent from '@testing-library/user-event'
 
 /*
-5.13: Blog List Tests, step 1
+5.14: Blog List Tests, step 2
 
-Make a test, which checks that the component displaying a blog renders the blog's title and author, but does not render its URL or number of likes by default.
-
-Add CSS classes to the component to help the testing as necessary.
+Make a test, which checks that the blog's URL and number of likes are shown when the button controlling the shown details has been clicked.
 */
 
 describe('<Blog />', () => {
-  test('Rednders blog\'s title & author, and does not render url or likes', () => {
-    const blog = {
-      title: 'test blog title',
-      author: 'mstflotfy',
-      url: '/test-blog',
-      likes: 200,
-      user: {
-        username: 'mstflotfy'
-      }
-    }
+  let container
 
-    const user = {
+  const blog = {
+    title: 'test blog title',
+    author: 'mstflotfy',
+    url: '/test-blog',
+    likes: 200,
+    user: {
       username: 'mstflotfy'
     }
+  }
 
-    const { container } = render(<Blog blog={blog} user={user}/>)
+  const user = {
+    username: 'mstflotfy'
+  }
+
+  beforeEach(() => {
+    container = render(<Blog blog={blog} user={user} />).container
+  })
+
+  test('Rednders blog\'s title & author, and does not render url or likes, by default', () => {
     expect(container).toHaveTextContent(blog.title)
     expect(container).toHaveTextContent(blog.author)
     expect(container).not.toHaveTextContent(blog.url)
     expect(container).not.toHaveTextContent(blog.likes)
-    screen.debug()
+  })
+
+  test('url & likes appear when view button is clicked', async () => {
+    const user = userEvent.setup()
+    const showButton = screen.getByText('view')
+
+    await user.click(showButton)
+
+    expect(container).toHaveTextContent(blog.url)
+    expect(container).toHaveTextContent(blog.likes)
   })
 })
