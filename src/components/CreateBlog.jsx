@@ -10,7 +10,7 @@ const Createblog = ({ handleNotification, fetchBlogs, newPostRef }) => {
   const handleSubmitBlog = async (event) => {
     event.preventDefault()
 
-    const newBlog = {title: newBlogTitle, author: newBlogAuthor, url: newBlogUrl}
+    const newBlog = { title: newBlogTitle, author: newBlogAuthor, url: newBlogUrl }
 
     try {
       await blogService.createNew(newBlog)
@@ -37,8 +37,8 @@ const Createblog = ({ handleNotification, fetchBlogs, newPostRef }) => {
       <h2>Create Blog</h2>
       <div>
         <label>Title</label>
-        <input 
-          type="text" 
+        <input
+          type="text"
           value={newBlogTitle}
           name="Title"
           onChange={(event) => setNewBlogTitle(event.target.value)}

@@ -17,7 +17,7 @@ const Blog = ({ blog, handleIncrementLikes, handleDeletePost, user }) => {
   return (
     <div className="Blog">
       <h3>
-        {blog.title}
+        {blog.title}, {blog.author}
       </h3>
       <Togglable
         showButtonText="view"
@@ -29,9 +29,6 @@ const Blog = ({ blog, handleIncrementLikes, handleDeletePost, user }) => {
           <p style={listItemStyle}>
             Likes: {blog.likes}
             <button onClick={() => handleIncrementLikes(blog)}>Like</button>
-          </p>
-          <p>
-            Author: {blog.author}
           </p>
         </div>
         {
